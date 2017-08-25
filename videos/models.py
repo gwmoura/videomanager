@@ -73,41 +73,19 @@ class Video(models.Model):
     def __str__(self):
         return self.title
 
-class ThumbsUpManager(models.Manager):
-    def get_queryset(self):
-        return super(ThumbsUpManager, self).get_queryset().filter(is_positive=True)
-
-class ThumbsDownManager(models.Manager):
-    def get_queryset(self):
-        return super(ThumbsDownManager, self).get_queryset().filter(is_positive=False)
-
 class Thumb(models.Model):
     is_positive = models.BooleanField()
     time = models.DateTimeField()
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='thumbs')
 
-    up_objects = ThumbsUpManager()
-    down_objects = ThumbsDownManager()
-
     def __str__(self):
         return "%s - %s" % (self.video.title, self.is_positive)
 
-class CommentsPositiveManager(models.Manager):
-    def get_queryset(self):
-        return super(CommentsPositiveManager, self).get_queryset().filter(is_positive=True)
-
-class CommentsNegativeManager(models.Manager):
-    def get_queryset(self):
-        return super(CommentsNegativeManager, self).get_queryset().filter(is_positive=False)
-
 class Comment(models.Model):
-    text = models.TextField()
+    text = models.TextField(null=True, blank=True)
     is_positive = models.BooleanField()
     time = models.DateTimeField()
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='comments')
-
-    positive_objects = CommentsPositiveManager()
-    negative_objects = CommentsNegativeManager()
 
     def __str__(self):
         return self.text
