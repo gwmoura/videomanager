@@ -26,7 +26,6 @@ class Video(models.Model):
     date_uploaded = models.DateTimeField()
     views = models.IntegerField(null=True, blank=True, default=0)
     themes = models.ManyToManyField(Theme, related_name='videos')
-    file = models.FileField(upload_to='uploads/%Y/%m/%d/')
 
     @property
     def score(self):
@@ -84,14 +83,14 @@ class ThumbsDownManager(models.Manager):
 
 class Thumb(models.Model):
     is_positive = models.BooleanField()
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField()
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='thumbs')
 
     up_objects = ThumbsUpManager()
     down_objects = ThumbsDownManager()
 
     def __str__(self):
-        return "%s - %i" % (self.video.title, self.is_positive)
+        return "%s - %s" % (self.video.title, self.is_positive)
 
 class CommentsPositiveManager(models.Manager):
     def get_queryset(self):
@@ -104,7 +103,7 @@ class CommentsNegativeManager(models.Manager):
 class Comment(models.Model):
     text = models.TextField()
     is_positive = models.BooleanField()
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField()
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='comments')
 
     positive_objects = CommentsPositiveManager()

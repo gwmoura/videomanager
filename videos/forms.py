@@ -22,9 +22,9 @@ class VideoForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        exclude = ('time',)
+        fields = '__all__'
 
 class ThumbForm(forms.ModelForm):
     class Meta:
         model = Thumb
-        exclude = ('time',)
+        fields = '__all__'
