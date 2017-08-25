@@ -84,15 +84,11 @@ class ThumbsDownManager(models.Manager):
 
 class Thumb(models.Model):
     is_positive = models.BooleanField()
-    time = models.DateTimeField()
+    time = models.DateTimeField(auto_now_add=True)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='thumbs')
 
     up_objects = ThumbsUpManager()
     down_objects = ThumbsDownManager()
-
-    def save(self, *args, **kwargs):
-        self.time = datetime.now()
-        super(Thumb, self).save(*args, **kwargs)
 
     def __str__(self):
         return "%s - %i" % (self.video.title, self.is_positive)
@@ -108,15 +104,11 @@ class CommentsNegativeManager(models.Manager):
 class Comment(models.Model):
     text = models.TextField()
     is_positive = models.BooleanField()
-    time = models.DateTimeField()
+    time = models.DateTimeField(auto_now_add=True)
     video = models.ForeignKey(Video, on_delete=models.CASCADE, related_name='comments')
 
     positive_objects = CommentsPositiveManager()
     negative_objects = CommentsNegativeManager()
-
-    def save(self, *args, **kwargs):
-        self.time = datetime.now()
-        super(Comment, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.text
